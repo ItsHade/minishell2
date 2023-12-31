@@ -6,7 +6,7 @@
 /*   By: maburnet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 12:11:27 by maburnet          #+#    #+#             */
-/*   Updated: 2023/12/30 12:11:33 by maburnet         ###   ########.fr       */
+/*   Updated: 2023/12/31 18:52:31 by maburnet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,10 @@ int	check_syntax_error(t_token **tl, t_token *cur)
 	if (cur)
 	{
 		g_return = 2;
-		if (cur->next)
+		if (cur->label == PIPE && cur->index == 0)
+			printf("minishell: syntax error near unexpected token `%s'\n",
+				(char *)cur->value);
+		else if (cur->next)
 			printf("minishell: syntax error near unexpected token `%s'\n",
 				(char *)cur->next->value);
 		else

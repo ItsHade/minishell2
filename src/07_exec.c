@@ -6,7 +6,7 @@
 /*   By: maburnet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 12:17:27 by maburnet          #+#    #+#             */
-/*   Updated: 2023/12/30 12:17:31 by maburnet         ###   ########.fr       */
+/*   Updated: 2023/12/31 17:37:13 by maburnet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	ft_exec(char **command, t_envp **envp)
 	char	*path;
 	char	**env;
 
+	fprintf(stderr, "cmd: %s\n", command[0]);
 	if (!command[0])
 		return (0);
 	env = ft_lst_to_tab(envp);
@@ -26,18 +27,13 @@ int	ft_exec(char **command, t_envp **envp)
 		return (g_return);
 	if (!command)
 		return (ft_freetab(env), g_return);
-	if (ft_is_absolute(command[0]) == 0)
-		return (ft_exec_abs(command, env));
-	else if (ft_is_absolute(command[0]) == 2)
-		return (error_msg(command[0], PERM, 126), ft_freetab(env), g_return);
 	path = ft_findcmdpath(command[0], env, NULL, NULL);
-	if (!path && ft_getenv("PATH", *envp) != NULL)
-		return (error_msg(command[0], NFOUND, 127), ft_freetab(env), g_return);
-	else if (!path)
-		return (error_msg(command[0], NOFILE, 127), ft_freetab(env), g_return);
+	if (!path)
+		return (ft_freetab(env), -1);
+	fprintf(stderr, "path: %s\n", path);
 	if (execve(path, command, env) == -1)
 	{
-		error_msg(command[0], NFOUND, 127);
+		ft_execve_error(command[0]);
 		return (ft_free(path), ft_freetab(env), g_return);
 	}
 	return (0);

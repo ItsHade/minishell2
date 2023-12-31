@@ -194,9 +194,9 @@ int		ft_do_cmd(t_data *data, t_envp **envp, int i);
 
 /* 08 EXEC 2 */
 
-int		ft_exec_abs(char **command, char **envp);
+int		ft_is_directory(char *cmd);
 
-int		ft_is_absolute(char *cmd);
+int		ft_execve_error(char *cmd);
 
 int		ft_get_return_value(t_data *data);
 

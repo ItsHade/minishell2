@@ -6,7 +6,7 @@
 /*   By: maburnet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 11:32:44 by maburnet          #+#    #+#             */
-/*   Updated: 2023/12/30 11:32:47 by maburnet         ###   ########.fr       */
+/*   Updated: 2023/12/31 17:56:27 by maburnet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,11 @@ char	*ft_findcmdpath(char *cmd, char **envp, char *tmp, char *cmd_path)
 	command = ft_split(cmd, ' ');
 	if (command == NULL)
 		return (ft_freetab(paths), NULL);
+	if (access(command[0], F_OK) == 0 && access(command[0], X_OK) == 0 && !ft_is_directory(cmd))
+	{
+		cmd_path = ft_strdup(command[0]);
+		return (ft_freetab(paths), ft_freetab(command), cmd_path);
+	}
 	while (paths[++i])
 	{
 		tmp = ft_strjoin(paths[i], "/");
@@ -94,9 +99,9 @@ char	*ft_findcmdpath(char *cmd, char **envp, char *tmp, char *cmd_path)
 		if (!cmd_path)
 			return (ft_freetab(paths), ft_freetab(command), free(tmp), NULL);
 		free(tmp);
-		if (access(cmd_path, F_OK | X_OK) == 0)
+		if (access(cmd_path, F_OK) == 0 && access(cmd_path, X_OK) == 0)
 			return (ft_freetab(paths), ft_freetab(command), cmd_path);
 		free(cmd_path);
 	}
-	return (ft_freetab(paths), ft_freetab(command), NULL);
+	return (ft_freetab(paths), ft_freetab(command), ft_strdup(cmd)); //NULL
 }

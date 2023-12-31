@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenization.c                                     :+:      :+:    :+:   */
+/*   14_tokenization.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maburnet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 18:30:22 by maburnet          #+#    #+#             */
-/*   Updated: 2023/12/30 18:30:24 by maburnet         ###   ########.fr       */
+/*   Updated: 2023/12/31 13:04:06 by maburnet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,6 @@ int	ft_quote_word_len(char *line, int *i, char *quote, int *in_quotes)
 
 int	ft_get_amb(t_command *command)
 {
-	int	a;
-
-	a = 0;
 	command->is_ambiguous = ft_calloc(sizeof(int), command->nb_io);
 	if (!command->is_ambiguous)
 		return (perror("ft_calloc in ft_get_amb"), -1);
