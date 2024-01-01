@@ -26,15 +26,13 @@ int	ft_is_directory(char *cmd)
 	return (0);
 }
 
-int	ft_execve_error(char *cmd)
+int	ft_execve_error(char *cmd, int nopath)
 {
-	//
-	fprintf(stderr, "errno: %d\n", errno);
 	if (errno == EACCES && ft_is_directory(cmd))
 		error_msg(cmd, ISDIR, 126);
 	else if (errno == EACCES)
 		error_msg(cmd, PERM, 126);
-	else if (errno == ENOENT && ft_is_directory(cmd))
+	else if (errno == ENOENT && (ft_is_directory(cmd) || nopath == 1))
 		error_msg(cmd, NOFILE, 127);
 	else
 		error_msg(cmd, NFOUND, 127);

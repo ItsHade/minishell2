@@ -106,6 +106,7 @@ typedef struct s_data
 	int			stdout;
 	int			pid;
 	int			status;
+	int			nopath;
 }	t_data;
 
 /* 00_MAIN */
@@ -184,7 +185,7 @@ int		ft_get_redir(t_command *command, t_token **next_cmd);
 
 /* 07 EXEC */
 
-int		ft_exec(char **command, t_envp **envp);
+int		ft_exec(t_data *data, char **command, t_envp **envp);
 
 int		ft_do_child(t_data *data, t_envp **envp, int i);
 
@@ -196,7 +197,7 @@ int		ft_do_cmd(t_data *data, t_envp **envp, int i);
 
 int		ft_is_directory(char *cmd);
 
-int		ft_execve_error(char *cmd);
+int		ft_execve_error(char *cmd, int nopath);
 
 int		ft_get_return_value(t_data *data);
 

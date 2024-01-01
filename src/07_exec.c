@@ -14,12 +14,12 @@
 
 extern int	g_return;
 
-int	ft_exec(char **command, t_envp **envp)
+int	ft_exec(t_data *data, char **command, t_envp **envp)
 {
 	char	*path;
 	char	**env;
 
-	fprintf(stderr, "cmd: %s\n", command[0]);
+	data->nopath = 0;
 	if (!command[0])
 		return (0);
 	env = ft_lst_to_tab(envp);
@@ -30,10 +30,11 @@ int	ft_exec(char **command, t_envp **envp)
 	path = ft_findcmdpath(command[0], env, NULL, NULL);
 	if (!path)
 		return (ft_freetab(env), -1);
-	fprintf(stderr, "path: %s\n", path);
+	if (ft_strcmp(command[0], path) == 0)
+		data->nopath = 1;
 	if (execve(path, command, env) == -1)
 	{
-		ft_execve_error(command[0]);
+		ft_execve_error(command[0], data->nopath);
 		return (ft_free(path), ft_freetab(env), g_return);
 	}
 	return (0);
@@ -51,7 +52,7 @@ int	ft_do_child(t_data *data, t_envp **envp, int i)
 	close(data->pipefd[0]);
 	close(data->pipefd[1]);
 	g_return = ft_io_file(data, envp, i, 1);
-	g_return = ft_exec(data->commands[i].cmd_arg, envp);
+	g_return = ft_exec(data, data->commands[i].cmd_arg, envp);
 	ft_freecmdtable(data);
 	clear_ep(envp);
 	return (g_return);

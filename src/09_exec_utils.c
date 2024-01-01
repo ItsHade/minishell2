@@ -22,12 +22,23 @@ void	ft_close_std(t_data *data)
 
 void	error_msg(char *file, char *msg, int ret)
 {
+	char	*print;
+
 	g_return = ret;
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(file, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
+	print = ft_strjoin("minishell: ", file);
+	if (!print)
+		return ;
+	print = ft_strjoinf(print, ": ");
+	if (!print)
+		return ;
+	print = ft_strjoinf(print, msg);
+	if (!print)
+		return ;
+	print = ft_strjoinf(print, "\n");
+	if (!print)
+		return ;
+	ft_putstr_fd(print, 2);
+	ft_free(print);
 }
 
 char	**ft_removepathprefix(char **paths)
@@ -76,32 +87,26 @@ char	*ft_findcmdpath(char *cmd, char **envp, char *tmp, char *cmd_path)
 {
 	int		i;
 	char	**paths;
-	char	**command;
 
 	i = -1;
+	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0
+		&& !ft_is_directory(cmd))
+		return (ft_strdup(cmd));
 	paths = ft_getpaths(envp);
 	if (!paths)
-		return (NULL);
-	command = ft_split(cmd, ' ');
-	if (command == NULL)
-		return (ft_freetab(paths), NULL);
-	if (access(command[0], F_OK) == 0 && access(command[0], X_OK) == 0 && !ft_is_directory(cmd))
-	{
-		cmd_path = ft_strdup(command[0]);
-		return (ft_freetab(paths), ft_freetab(command), cmd_path);
-	}
+		return (ft_strdup(cmd));
 	while (paths[++i])
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		if (!tmp)
-			return (ft_freetab(paths), ft_freetab(command), NULL);
+			return (ft_freetab(paths), NULL);
 		cmd_path = ft_strjoin(tmp, cmd);
 		if (!cmd_path)
-			return (ft_freetab(paths), ft_freetab(command), free(tmp), NULL);
+			return (ft_freetab(paths), free(tmp), NULL);
 		free(tmp);
 		if (access(cmd_path, F_OK) == 0 && access(cmd_path, X_OK) == 0)
-			return (ft_freetab(paths), ft_freetab(command), cmd_path);
+			return (ft_freetab(paths), cmd_path);
 		free(cmd_path);
 	}
-	return (ft_freetab(paths), ft_freetab(command), ft_strdup(cmd)); //NULL
+	return (ft_freetab(paths), ft_strdup(cmd));
 }

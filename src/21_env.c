@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   21_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maburnet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 13:13:02 by maburnet          #+#    #+#             */
-/*   Updated: 2023/12/30 13:19:25 by maburnet         ###   ########.fr       */
+/*   Updated: 2024/01/01 17:29:18 by maburnet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	**split_env(char *s)
 		if (tlen)
 			return (add_content(ft_substr(s, 0, i), ft_substr(s, i + 1, tlen)));
 		else
-			return (add_content(ft_substr(s, 0, i), NULL));
+			return (add_content(ft_substr(s, 0, i), ft_strdup("")));
 	}
 	else
 		return (add_content(ft_substr(s, 0, i), NULL));

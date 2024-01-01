@@ -37,6 +37,8 @@ int	is_printable(char c)
 
 int	is_redir(char *s, int i)
 {
+	if (i == 0)
+		return (0);
 	i--;
 	if (is_printable(s[i]) && !isset("<>", s[i]))
 	{
